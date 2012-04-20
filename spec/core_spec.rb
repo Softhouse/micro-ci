@@ -6,5 +6,7 @@ describe "core" do
   end
   it "can add a watcher" do
     @core.watchers << DirectoryWatcher.new
+
+    @core.watchers.size.should == 1
   end
 end
