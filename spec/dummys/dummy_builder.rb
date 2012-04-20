@@ -12,7 +12,7 @@ class DummyBuilder
     @current_run_status = :running
     @id = build_args[:id]
     #build...
-    @current_result = { :id => build_args[:id], :logs => nil}
+    @current_result = {:id => build_args[:id], :logs => nil, :result => :success}
     @current_run_status = :idle
   end
 
