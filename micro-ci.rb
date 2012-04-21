@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'optparse'
 lib = File.expand_path("lib", File.dirname(__FILE__))
 Dir[File.join(lib, "**/*.rb")].each {|f| require_relative f}
@@ -6,7 +7,9 @@ require_relative 'spec/dummys/dummy_logger'
 
 options = {}
 optparse = OptionParser.new do |opts|
-  opts.banner = 'micro-ci - The minimal CI for your convenience'
+  opts.banner = 'µ-ci - The minimal CI for your convenience'
+  opts.separator ""
+  opts.separator "Usage: micro-ci [options]"
   opts.on("-p", "--path PATH", "The path to check for changes") do |p|
     options[:path] = p
   end
