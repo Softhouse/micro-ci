@@ -5,14 +5,34 @@ require_relative 'spec/dummys/dummy_logger'
 
 
 options = {}
-OptionParser.new do |opts|
+optparse = OptionParser.new do |opts|
+  opts.banner = 'micro-ci - The minimal CI for your convenience'
   opts.on("-p", "--path PATH", "The path to check for changes") do |p|
     options[:path] = p
   end
-  opts.on("-c", "--command-line COMMANDLINE", "The command-line to run when a change has happened") do |c|
+  opts.on("-c COMMANDLINE", "--command-line COMMANDLINE", "The command-line to run when a change has happened") do |c|
     options[:commandline] = c
   end
-end.parse!
+  opts.on('-h', '--help', 'Display this screen') do
+    puts opts
+    exit
+  end
+end
+
+begin
+  optparse.parse!
+  mandatory = [:path, :command]
+  missing = mandatory.select{ |param| options[param].nil? }
+  if not missing.empty?
+    puts "Missing options: #{missing.join(', ')}"
+    puts optparse
+    exit
+  end    
+rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+  puts $!.to_s
+  puts optparse
+  exit
+end
 
 core = Core.new
 core.builder = CommandLineBuilder.new({:command_line => options[:commandline]})
