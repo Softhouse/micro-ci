@@ -20,4 +20,13 @@ describe "filesystem_watcher" do
      sleep 1
      @core.logger.counter.should == 1
   end
+  it "see only specific file in dir" do
+     @core.watchers << FilesystemWatcher.new(@core, {:path => @test_dir, :glob => "*.rb", :interval => 0.1})
+     filename = File.join(@test_dir, "test_file1.rb")
+     File.open(filename, 'a'){|f| f.puts ' '}
+     filename2 = File.join(@test_dir, "test_file2.txt")
+     File.open(filename2, 'a'){|f| f.puts ' '}
+     sleep 1
+     @core.logger.counter.should == 1
+  end
 end
