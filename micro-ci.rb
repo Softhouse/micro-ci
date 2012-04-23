@@ -13,7 +13,7 @@ optparse = OptionParser.new do |opts|
   opts.on("-p", "--path PATH", "The path to check for changes") do |p|
     options[:path] = p
   end
-  opts.on("-c COMMANDLINE", "--command-line COMMANDLINE", "The command-line to run when a change has happened") do |c|
+  opts.on("-c COMMANDLINE", "--commandline COMMANDLINE", "The command-line to run when a change has happened") do |c|
     options[:commandline] = c
   end
   opts.on('-h', '--help', 'Display this screen') do
@@ -24,7 +24,7 @@ end
 
 begin
   optparse.parse!
-  mandatory = [:path, :command]
+  mandatory = [:path, :commandline]
   missing = mandatory.select{ |param| options[param].nil? }
   if not missing.empty?
     puts "Missing options: #{missing.join(', ')}"
