@@ -3,9 +3,9 @@ require 'optparse'
 lib = File.expand_path("lib", File.dirname(__FILE__))
 Dir[File.join(lib, "**/*.rb")].each {|f| require_relative f}
 require_relative 'spec/dummys/dummy_logger'
-
-
-options = {}
+require 'yaml'
+ 
+options = YAML.load_file("config.yaml") || {}
 optparse = OptionParser.new do |opts|
   opts.banner = 'µ-ci - The minimal CI for your convenience'
   opts.separator ""
@@ -29,7 +29,7 @@ begin
   if not missing.empty?
     puts "Missing options: #{missing.join(', ')}"
     puts optparse
-    exit
+    exit 
   end    
 rescue OptionParser::InvalidOption, OptionParser::MissingArgument
   puts $!.to_s
@@ -37,10 +37,14 @@ rescue OptionParser::InvalidOption, OptionParser::MissingArgument
   exit
 end
 
+fwopts = {}
+fwopts[:path] = options[:path] if options.has_key?(:path)
+fwopts[:interval] = options[:interval] if options.has_key?(:interval)
+
 core = Core.new
 core.builder = CommandLineBuilder.new({:command_line => options[:commandline]})
 core.logger = DummyLogger.new
-core.watchers << FilesystemWatcher.new(core, {:path => options[:path]})
+core.watchers << FilesystemWatcher.new(core, fwopts)
 
 puts "press any key to kill me"
 gets

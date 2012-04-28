@@ -1,0 +1,8 @@
+# Example config file for micro-ci
+
+# Filesystemwatcher
+:path: "." 
+:interval: 2.0
+
+# Commandline builder
+:commandline: "rake spec"
