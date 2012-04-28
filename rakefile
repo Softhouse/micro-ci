@@ -1,6 +1,31 @@
 require 'rake'
 require 'rspec/core/rake_task'
+require 'releasy'
 
 RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
+
+Releasy::Project.new do
+  name "Micro-CI"
+  #version  MyApplication::VERSION
+
+  executable "micro-ci.rb"
+  files `git ls-files`.split("\n")
+  files.exclude '.gitignore'
+
+  exposed_files ["README.md", "LICENSE"]
+  add_link "http://micro-ci.github.com", "Micro-ci website"
+  exclude_encoding
+
+  add_build :source do
+    add_package :"7z"
+  end
+
+  add_build :osx_app do
+    url "se.softhouse.micro-ci"
+    wrapper "wrappers/gosu-mac-wrapper-0.7.41.tar.gz"
+    # icon "media/icon.icns"
+    # add_package :tar_gz
+  end
+end
